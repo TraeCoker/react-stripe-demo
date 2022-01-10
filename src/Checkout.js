@@ -17,6 +17,7 @@ export function Checkout(){
 
     const changeQuantity = (v) => setProduct({...product, quantity: Math.max(0, product.quantity + v)});
 
+    
     return (
         <>
     
@@ -41,6 +42,11 @@ export function Checkout(){
     
           <hr />
     
+          <button
+            onClick={handleClick}
+            disabled={product.quantity < 1}>
+            Start Checkout
+          </button>
         </>
       );
 
