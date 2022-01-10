@@ -67,3 +67,13 @@ export function Checkout(){
       );
 
 }
+
+export function CheckoutFail(){
+    return <h3>Checkout failed!</h3>
+}
+
+export function CheckoutSuccess(){
+    const url = window.location.href;
+    const sessionId = new URL(url).searchParams.get('session_id');
+    <h3>Checkout was a success! {sessionId}</h3>
+}
