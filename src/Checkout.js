@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useStripe } from "@stripe/react-stripe-js";
+import { fetchFromAPI } from "./helpers";
+import { stripePromise } from ".";
 
 export function Checkout(){
     const stripe = useStripe();
@@ -17,7 +19,21 @@ export function Checkout(){
 
     const changeQuantity = (v) => setProduct({...product, quantity: Math.max(0, product.quantity + v)});
 
-    
+    const handleClick = async (event) => {
+        const body = {line_items: [product] };
+        const {id: sessionId } = await fetchFromAPI('checkouts', {
+            body
+        });
+
+        const { error } = await stripe.redirectToCheckout({
+            sessionId,
+        });
+
+        if(error) {
+            console.log(error);
+        };
+    };
+
     return (
         <>
     
