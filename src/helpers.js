@@ -9,7 +9,7 @@ export async function fetchFromAPI(endpointURL, opts) {
 
     const res = await fetch(`${API}/${endpointURL}`, {
         method, 
-        ...fetch(body && { body: JSON.stringify(body) }),
+        ...(body && { body: JSON.stringify(body) }),
         headers: {
             'Content-Type': 'application/json'
         },
