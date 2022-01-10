@@ -15,6 +15,33 @@ export function Checkout(){
         quantity: 0,
     });
 
+    const changeQuantity = (v) => setProduct({...product, quantity: Math.max(0, product.quantity + v)});
+
+    return (
+        <>
     
+          <div>
+            <h3>{product.name}</h3>
+            <h4>Stripe Amount: {product.amount}</h4>
+    
+            <img src={product.images[0]} width="250px" alt="product" />
+    
+            <button
+              onClick={() => changeQuantity(-1)}>
+              -
+            </button>
+            <span>
+              {product.quantity}
+            </span>
+            <button
+              onClick={() => changeQuantity(1)}>
+              +
+            </button>
+          </div>
+    
+          <hr />
+    
+        </>
+      );
 
 }
