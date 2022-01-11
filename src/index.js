@@ -23,10 +23,10 @@ export const stripePromise = loadStripe(
 
 ReactDOM.render(
   <React.StrictMode>
-  <FirebaseAppProvider firebaseConfig={firebaseConfig}>
-    <Elements stripe={stripePromise}>
-        <App />
-    </Elements>
+    <FirebaseAppProvider firebaseConfig={firebaseConfig}>
+      <Elements stripe={stripePromise}>
+          <App />
+      </Elements>
     </FirebaseAppProvider>
   </React.StrictMode>,
   document.getElementById('root')
