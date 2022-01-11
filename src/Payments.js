@@ -21,6 +21,27 @@ function Payments() {
         setPaymentIntent(pi);
     };
 
+    //Handle submission of card details
+    const handleSubmit = async(event) =>{
+        event.preventDefault();
+
+        const cardElement = elements.getElement(CardElement);
+
+        //Confirm card payment
+        const {
+            paymentIntent: updatedPaymentIntent,
+            error,
+        } = await stripe.confirmCardPayment(paymentIntent.client_secret,{
+            payment_method: {card: cardElement},
+        });
+
+        if (error){
+            console.log(error);
+            error.payment_intent && setPaymentIntent(error.payment_intent);
+        } else {
+            setPaymentIntent(updatedPaymentIntent);
+        }
+    };
 
     return(
         <>
@@ -46,7 +67,7 @@ function Payments() {
               Pay
             </button>
           </form>
-          
+
         </>
     )
 
