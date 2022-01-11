@@ -37,9 +37,16 @@ function Payments() {
              onClick={createPaymentIntent}
              hidden={paymentIntent}>
              Ready to Pay ${ (amount / 100).toFixed(2) }
-          </button>
-         </div>
+           </button>
+          </div>
 
+          <form onSubmit={handleSubmit}>
+            <CardElement />
+            <button  type="submit">
+              Pay
+            </button>
+          </form>
+          
         </>
     )
 
