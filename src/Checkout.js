@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useStripe } from "@stripe/react-stripe-js";
 import { fetchFromAPI } from "./helpers";
-import { stripePromise } from ".";
+
 
 export function Checkout(){
     const stripe = useStripe();
