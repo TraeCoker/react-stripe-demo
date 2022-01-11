@@ -9,6 +9,18 @@ function Payments() {
     const [amount, setAmount] = useState();
     const [paymentIntent, setPaymentIntent] = useState();
 
+    //Create payment intent on server
+    const createPaymentIntent = async(event) => {
+
+        //Clamp amount to Strip min/max
+        const validAmount = Math.min(Math.max(amount, 50), 999999);
+        setAmount(validAmount);
+
+        //Make API request
+        const pi = await fetchFromAPI('payments', {body: {amount: validAmount } });
+        setPaymentIntent(pi);
+    };
+
 
     return(
         <>
