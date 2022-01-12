@@ -1,3 +1,4 @@
+import { setUserProperties } from 'firebase/analytics';
 import firebase from 'firebase/app';
 import { auth, db } from './firebase';
 
@@ -15,4 +16,13 @@ export function SignIn() {
             Sign In with Google
         </button>
     );
+}
+
+export function SignOut(props){
+    return props.user && (
+
+        <button onClick={() => auth.signOut()}>
+            Sign Out User {props.user.uid}
+        </button>
+    )
 }
