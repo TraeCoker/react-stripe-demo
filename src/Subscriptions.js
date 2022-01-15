@@ -27,3 +27,39 @@ function UserData(props) {
     );
 
 }
+
+function SubscribeToPlan(props) {
+    const stripe = useStripe();
+    const elements = useElements();
+    const user = useUser();
+
+    const [plan, setPlan] = useState();
+    const [subscriptions, setSubscriptions] = useState([]);
+    const [loading, setLoading ] = useState(false);
+
+    //Get current subscriptions on mount
+    useEffect(() => {
+        getSubscriptions();
+    }, [user]);
+
+    //Fetch current subscriptions from the API
+    const getSubscriptions = async () => {
+        if(user) {
+            const subs = await fetchFromApi('subscriptions', {method: 'GET'});
+            setSubscriptions(subs);
+        }
+    }
+
+
+    return (
+        <>
+            <AuthCheck fallback={<SignIn />} >
+
+
+                <div>
+                    <SignOut user={user} />
+                </div>
+            </AuthCheck> 
+        </>
+    )
+}
