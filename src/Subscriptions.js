@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Suspense } from 'react';
-import { fetchFromApi } from './helpers';
+import { fetchFromAPI, fetchFromApi } from './helpers';
 import { CardElement } from '@stripe/react-stripe-js';
 import { useUser, AuthCheck } from 'reactfire';
 
@@ -37,6 +37,60 @@ function SubscribeToPlan(props) {
     const [subscriptions, setSubscriptions] = useState([]);
     const [loading, setLoading ] = useState(false);
 
+    //Handle the submission of card details
+    const handleSubmit = async (event) => {
+        setLoading(true);
+        event.preventDefault();
+
+        const CardElement = elements.getElement(CardElement);
+
+        //Create Payment Method
+        const { paymentMethod, error } = await stripe.createPaymentMethod({
+            type: 'card',
+            card: CardElement,
+        });
+
+        if(error) {
+            alert(error.message);
+            setLoading(false);
+            return;
+        }
+
+        //Create Subscription on the server
+        const subscription = await fetchFromAPI('subscriptions', {
+            body: {
+                plan, 
+                payment_method: paymentMethod.id,
+            },
+        });
+
+        //The subscription contains an invoice
+        //If the invoice's payment succeeded then you're good
+        //otherwise, the payment intent must be confirmed
+        const { latest_invoice } = subscription;
+
+        if(latest_invoice.payment_intent) {
+            const { client_secret, status } = latest_invoice.payment_intent;
+
+            if(status === 'requires_action') {
+                const { error: confirmationError } = await stripe.confirmCardPayment(
+                    client_secret
+                );
+                if (confirmationError) {
+                    console.log(confirmationError);
+                    alert('unable to confirm card');
+                    return;
+                }
+        }
+
+            //success
+            alert('You are subscribed!');
+            getSubscriptions();
+        }
+
+        setLoading(false);
+        setPlan(null);
+    };
     //Get current subscriptions on mount
     useEffect(() => {
         getSubscriptions();
