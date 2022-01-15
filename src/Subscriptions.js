@@ -64,6 +64,24 @@ function SubscribeToPlan(props) {
             <AuthCheck fallback={<SignIn />} >
 
                 <div>
+
+                    <button
+                      onClick={() => setPlan('price_1KHf5OEFpPobBmTk37NB2k5c')}>
+                      Choose Monthly $25/m
+                    </button>
+
+                    <button
+                      onClick={() => setPlan('price_1KHf5OEFpPobBmTkLpTaKnk4')}>
+                      Choose Quarterly $50/q 
+                    </button>
+
+                    <p>
+                      Selected Plan: <strong>{plan}</strong>
+                    </p>
+                </div>
+                <hr />
+
+                <div>
                     <h3>Manage Current Subscriptions</h3>
                     <div>
                       {subscriptions.map((sub) => {
