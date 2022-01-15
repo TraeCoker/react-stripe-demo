@@ -49,6 +49,30 @@ function SaveCard(props) {
         setSetupIntent(si);
     };
 
+    //Handle the submission of card details
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+
+        const cardElement = elements.getElement(cardElement)
+
+        //Confirm Card Setup
+        const {
+            setupIntent: updatedSetupIntent,
+            error,
+        } = await stripe.confirmCardSetup(setupIntent.client_secret, {
+            payment_method: {card: cardElement},
+        });
+
+        if (error) {
+            alert(error.message);
+            console.log(error);
+        } else {
+            setSetupIntent(updatedSetupIntent);
+            await getWallet();
+            alert('Success! Card added to your wallet'); 
+        }
+    };
+
     const getWallet = async () => {
         if (user){
             const paymentMethods = await fetchFromAPI('wallet', {method: 'GET' })
@@ -76,12 +100,14 @@ function SaveCard(props) {
                   </button>
               </form>
 
+              <div>
+                <h3>Retrieve all Payment Sources</h3>
                 <select>
                     {wallet.map((paymentSource) => (
                         <CreditCard key={paymentSource.id} card={paymentSource.card} />
                     ))}
                 </select>
-
+              </div>              
                 <div>
                     <SignOut user={user}/>
                 </div>
@@ -97,5 +123,14 @@ function CreditCard(props) {
         <option>
             {brand} **** **** **** {last4} expires {exp_month}/{exp_year}
         </option>
+    );
+}
+
+//Reactfire uses suspense under the hood and requires component to be wrapped insuspense
+export default function Customers() {
+    return (
+        <Suspense fallback={'loading user'}>
+            <SaveCard />
+        </Suspense>
     );
 }
