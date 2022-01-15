@@ -81,6 +81,15 @@ function SubscribeToPlan(props) {
                 </div>
                 <hr />
 
+                <form onSubmit={handleSubmit} hidden={!plan}>
+
+                    <CardElement />
+                    <button type='submit' disabled={loading}>
+                        Subscribe & Pay
+                    </button>
+
+                </form>
+
                 <div>
                     <h3>Manage Current Subscriptions</h3>
                     <div>
