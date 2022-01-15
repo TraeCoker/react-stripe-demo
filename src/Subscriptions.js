@@ -63,6 +63,22 @@ function SubscribeToPlan(props) {
         <>
             <AuthCheck fallback={<SignIn />} >
 
+                <div>
+                    <h3>Manage Current Subscriptions</h3>
+                    <div>
+                      {subscriptions.map((sub) => {
+                          <div key={subi.id}>
+                              {sub.id}. Next oaynebt of {sub.plan.amount} due {' '}
+                              {new Date(sub.current_period_end * 1000).toUTCString()}
+                              <button
+                                onClick={() => cancel(sub.id)}
+                                disabled={loading}>
+                                Cancel
+                              </button>
+                          </div>
+                      })}
+                    </div>
+                </div>
 
                 <div>
                     <SignOut user={user} />
