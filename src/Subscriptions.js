@@ -48,7 +48,15 @@ function SubscribeToPlan(props) {
             const subs = await fetchFromApi('subscriptions', {method: 'GET'});
             setSubscriptions(subs);
         }
-    }
+    };
+
+    const cancel = async (id) => {
+        setLoading(true);
+        await fetchFromApi('subscriptions/' + id, { method: 'PATCH'});
+        alert('canceled!');
+        await getSubscriptions();
+        setLoading(false);
+    };
 
 
     return (
