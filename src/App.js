@@ -1,14 +1,21 @@
 import React from 'react';
 
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { AuthProvider, useFirebaseApp  } from 'reactfire';
+import { getAuth } from 'firebase/auth';
 
 import { Checkout, CheckoutSuccess, CheckoutFail } from './Checkout';
 import Payments from './Payments';
 import Customers from './Customers';
 import Subscriptions from './Subscriptions';
 
+
 function App() {
+  const app = useFirebaseApp();
+  const auth = getAuth(app);
+
   return (
+    <AuthProvider sdk={auth}>
     <Router>
       <div>
         <nav>
@@ -78,6 +85,7 @@ function App() {
         </main>
       </div>
     </Router>
+    </AuthProvider>
   );
 }
 

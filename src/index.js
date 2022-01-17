@@ -5,7 +5,7 @@ import App from './App';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
-import { FirebaseAppProvider } from 'reactfire';
+import { FirebaseAppProvider, } from 'reactfire';
 
 const firebaseConfig = {
   apiKey: "AIzaSyDCdHTZonx79_GHyPRp9G072KetiMCimOc",
@@ -17,13 +17,15 @@ const firebaseConfig = {
   measurementId: "G-SQ083N746K"
 };
 
+
+
 export const stripePromise = loadStripe(
   'pk_test_51KGBNSEFpPobBmTkltOc1h9VYvzqjyMRayZIyRhSHTSDHfloP7D4JgA9FpcJRPAwiS7dTyMqGG6SKPiyLbMQvyeo00NazYii6J'
 );
 
 ReactDOM.render(
   <React.StrictMode>
-    <FirebaseAppProvider firebaseConfig={firebaseConfig}>
+    <FirebaseAppProvider firebaseConfig={firebaseConfig} suspense={true}>
       <Elements stripe={stripePromise}>
           <App />
       </Elements>
