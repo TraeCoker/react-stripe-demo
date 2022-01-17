@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Suspense } from 'react';
-import { fetchFromAPI, fetchFromApi } from './helpers';
-import { CardElement } from '@stripe/react-stripe-js';
+import { fetchFromAPI } from './helpers';
+import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { useUser, AuthCheck } from 'reactfire';
 
 import { db } from './firebase';
@@ -42,12 +42,12 @@ function SubscribeToPlan(props) {
         setLoading(true);
         event.preventDefault();
 
-        const CardElement = elements.getElement(CardElement);
+        const cardElement = elements.getElement(CardElement);
 
         //Create Payment Method
         const { paymentMethod, error } = await stripe.createPaymentMethod({
             type: 'card',
-            card: CardElement,
+            card: cardElement,
         });
 
         if(error) {
@@ -99,14 +99,14 @@ function SubscribeToPlan(props) {
     //Fetch current subscriptions from the API
     const getSubscriptions = async () => {
         if(user) {
-            const subs = await fetchFromApi('subscriptions', {method: 'GET'});
+            const subs = await fetchFromAPI('subscriptions', {method: 'GET'});
             setSubscriptions(subs);
         }
     };
 
     const cancel = async (id) => {
         setLoading(true);
-        await fetchFromApi('subscriptions/' + id, { method: 'PATCH'});
+        await fetchFromAPI('subscriptions/' + id, { method: 'PATCH'});
         alert('canceled!');
         await getSubscriptions();
         setLoading(false);
@@ -148,7 +148,7 @@ function SubscribeToPlan(props) {
                     <h3>Manage Current Subscriptions</h3>
                     <div>
                       {subscriptions.map((sub) => {
-                          <div key={subi.id}>
+                          <div key={sub.id}>
                               {sub.id}. Next oaynebt of {sub.plan.amount} due {' '}
                               {new Date(sub.current_period_end * 1000).toUTCString()}
                               <button
@@ -167,4 +167,12 @@ function SubscribeToPlan(props) {
             </AuthCheck> 
         </>
     )
-}
+};
+
+export default function Subscriptions() {
+    return (
+      <Suspense fallback={'loading user'}>
+        <SubscribeToPlan />
+      </Suspense>
+    );
+  }
