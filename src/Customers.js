@@ -7,7 +7,7 @@ import { auth, db } from './firebase';
 
 export function SignIn() {
     const signIn = async () => {
-        const credential = await auth.singInWithPopup(
+        const credential = await auth.signInWithPopup(
             new firebase.auth.GoogleAuthProvider()
         );
         const { uid, email } = credential.user;
